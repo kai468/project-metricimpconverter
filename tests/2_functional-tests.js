@@ -6,6 +6,7 @@ const server = require('../server');
 chai.use(chaiHttp);
 
 suite('Functional Tests', function() {
+    
     test('Test GET with valid input', function(done) {
         chai
             .request(server)
@@ -13,7 +14,7 @@ suite('Functional Tests', function() {
             .get('/api/convert?input=10L')
             .end( (req, res) => {
                 assert.equal(res.status, 200);
-                assert.equal(res.text, '{"initNum":10,"initUnit":"l","returnNum":2.64172,"returnUnit":"gal","string":"10 liters converts to 2.64172 gallons"}');
+                assert.equal(res.text, '{"initNum":10,"initUnit":"L","returnNum":2.64172,"returnUnit":"gal","string":"10 liters converts to 2.64172 gallons"}');
                 done();
             });
     });
@@ -24,10 +25,11 @@ suite('Functional Tests', function() {
             .get('/api/convert?input=32g')
             .end( (req, res) => {
                 assert.equal(res.status, 200);
-                assert.equal(res.text, '"invalid input"');
+                assert.equal(res.text, '"invalid unit"');
                 done();
             });
     });
+    
     test('Test GET with invalid number (double fraction)', function(done) {
         chai
             .request(server)
@@ -35,7 +37,7 @@ suite('Functional Tests', function() {
             .get('/api/convert?input=3/7.2/4kg')
             .end( (req, res) => {
                 assert.equal(res.status, 200);
-                assert.equal(res.text, '"invalid input"');
+                assert.equal(res.text, '"invalid number"');
                 done();
             });
     });
@@ -46,7 +48,7 @@ suite('Functional Tests', function() {
             .get('/api/convert?input=3/7.2/4kilomegagram')
             .end( (req, res) => {
                 assert.equal(res.status, 200);
-                assert.equal(res.text, '"invalid input"');
+                assert.equal(res.text, '"invalid number and unit"');
                 done();
             });
     });

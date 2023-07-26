@@ -9,10 +9,10 @@ function ConvertHandler() {
   const units = {
     "gal": {
       spelledOut: "gallons",
-      convertibleTo: "l",
+      convertibleTo: "L",
       conversion: galToL
     },
-    "l": {
+    "L": {
       spelledOut: "liters",
       convertibleTo: "gal",
       conversion: 1/galToL
@@ -38,6 +38,22 @@ function ConvertHandler() {
       conversion: 1/lbsToKg
     }
   }
+
+  this.validateInput = function(input) {
+    const matchUnit = input.match(/[a-z]+$/i); 
+    const number = matchUnit ? input.slice(0, matchUnit.index) : input; 
+    const matchNum = number.match(/^(\d*(?:\.\d+)?|\.\d+)(\/\d*(?:\.\d+)?|\.\d+)?$/);
+
+    
+    if ((!matchNum) && !(matchUnit && Object.keys(units).map(key => key.toLowerCase()).includes(matchUnit[0].toLowerCase()))) {
+      return "invalid number and unit";
+    } else if (!matchNum) {
+      return "invalid number";
+    } else if ((!matchUnit) || (matchUnit && !Object.keys(units).map(key => key.toLowerCase()).includes(matchUnit[0].toLowerCase()))) {
+      return "invalid unit"; 
+    }
+    
+  };
   
   this.getNum = function(input) {
     const match = input.match(inputRegex);
@@ -47,15 +63,19 @@ function ConvertHandler() {
       const den = match[2] ? parseFloat(match[2].substring(1)) : 1;
       return num / den; 
     } 
-    return "error";
+    return undefined;
   };
   
   this.getUnit = function(input) {
     const match = input.match(inputRegex);
-    if (match && Object.keys(units).includes(match[3].toLowerCase())) {
-      return match[3].toLowerCase();
+    if (match && Object.keys(units).map(key => key.toLowerCase()).includes(match[3].toLowerCase())) {
+      if (Object.keys(units).includes(match[3].toLowerCase())) {
+        return match[3].toLowerCase();
+      } else {
+        return match[3].toUpperCase();    // just for handling the uppercase "L" for liters
+      }
     }
-    return "error";
+    return undefined;
   };
   
   this.getReturnUnit = function(initUnit) {
@@ -79,9 +99,9 @@ function ConvertHandler() {
     const initNum = this.getNum(input);
     const initUnit = this.getUnit(input); 
     
-    if (initNum == "error" || initUnit == "error") {
-      return "invalid input"; 
-    } 
+    if (initNum == undefined || initUnit == undefined) {
+      return this.validateInput(input); 
+    }
 
     const returnNum = this.convert(initNum, initUnit);
     const returnUnit = this.getReturnUnit(initUnit);
