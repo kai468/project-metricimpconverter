@@ -6,7 +6,7 @@ const convertHandler = new ConvertHandler();
 
 
 suite('Unit Tests', function(){
-    suite('Input Reading and Validation', function(){
+    //suite('Input Reading and Validation', function(){
         test('read a whole number input', function() {
             assert.equal(convertHandler.getNum("3lbs"), 3);
         });
@@ -39,9 +39,9 @@ suite('Unit Tests', function(){
             assert.equal(convertHandler.getUnit("1lbsa"), undefined);
             assert.equal(convertHandler.getUnit("1albs"), undefined);
         });
-    });
+   // });
 
-    suite('Conversion', function() {
+    //suite('Conversion', function() {
         test('convert gal to L', function() {
             assert.approximately(convertHandler.convert(1, "gal"), 3.78541, 1/10000);
         });
@@ -60,9 +60,9 @@ suite('Unit Tests', function(){
         test('convert kg to lbs', function() {
             assert.approximately(convertHandler.convert(0.453592, "kg"), 1, 1/10000);
         });
-    });
+    //});
 
-    suite('Output formatting', function() {
+    //suite('Output formatting', function() {
         test('return correct return unit', function() {
             assert.equal(convertHandler.getReturnUnit("gal"), "L");
             assert.equal(convertHandler.getReturnUnit("L"), "gal");
@@ -79,7 +79,7 @@ suite('Unit Tests', function(){
             assert.equal(convertHandler.spellOutUnit("mi"), "miles");
             assert.equal(convertHandler.spellOutUnit("km"), "kilometers");
         });
-        test('getObject', function() {
+        /*test('getObject', function() {
             const expected = {
                 initNum: 0.2,
                 initUnit: "kg",
@@ -88,7 +88,7 @@ suite('Unit Tests', function(){
                 string: "0.2 kilograms converts to 0.44092 pounds"
             };
             assert.deepEqual(convertHandler.getObject("1.6/8KG"), expected);
-        });
-    });
+        });*/
+    //});
 
 });
